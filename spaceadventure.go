@@ -39,26 +39,18 @@ func main() {
 	fmt.Println("Welcome to the " + system.Name)
 	fmt.Println("There are " + strconv.Itoa(len(system.Planets)) + " planets")
 
-	fmt.Print("What is your name? ")
-	reader := bufio.NewReader(os.Stdin)
-	name, _ := reader.ReadString('\n')
-	name = strings.TrimRight(name, "\n")
+	name := GetInput("What is your name?")
 
 	fmt.Println("Nice to meet you " + name + "!")
 	fmt.Println("Let's go on an adventure!")
-	fmt.Println("Shall I randomly choose a planet for you? (Y or N)")
-
 	randomChoice := ""
 
 	for {
-		reader := bufio.NewReader(os.Stdin)
-		randomChoice, _ = reader.ReadString('\n')
-		randomChoice = strings.ToLower(strings.TrimRight(randomChoice, "\n"))
+		randomChoice = strings.ToLower(GetInput("Shall I randomly choose a planet for you? (Y or N)"))
 		if randomChoice == "y" || randomChoice == "n" {
 			break
 		}
-		fmt.Println("Invalid input. Try again (Y or N)")
-
+		fmt.Println("Invalid input")
 	}
 
 	if randomChoice == "y" {
@@ -68,15 +60,21 @@ func main() {
 		fmt.Println("Traveling to " + planet.Name)
 		fmt.Println("Arrived at " + planet.Name + ". " + planet.Description)
 	} else {
-		reader := bufio.NewReader(os.Stdin)
-		planetChoice, _ := reader.ReadString('\n')
-		planetChoice = strings.TrimRight(planetChoice, "\n")
+		planetChoice := GetInput("What planet would you like to visit?")
 		planet := FindPlanet(system.Planets, planetChoice)
 		fmt.Println("Traveling to " + planet.Name)
 		fmt.Println("Arrived at " + planet.Name + ". " + planet.Description)
 
 	}
 
+}
+
+func GetInput(prompt string) string {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(prompt + " ")
+	input, _ := reader.ReadString('\n')
+	input = strings.TrimRight(input, "\n")
+	return input
 }
 
 func FindPlanet(planets []Planet, name string) Planet {
