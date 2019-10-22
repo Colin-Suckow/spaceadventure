@@ -13,16 +13,6 @@ import (
 	"time"
 )
 
-type System struct {
-	Name    string   `json:"name"`
-	Planets []Planet `json:"planets"`
-}
-
-type Planet struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-}
-
 func main() {
 
 	if len(os.Args) <= 1 {
@@ -113,4 +103,14 @@ func FindPlanet(planets []Planet, name string) Planet {
 		Name:        "Null",
 		Description: "It is very quiet here...",
 	}
+}
+
+type System struct {
+	Name    string   `json:"name"`
+	Planets []Planet `json:"planets"`
+}
+
+type Planet struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
 }
