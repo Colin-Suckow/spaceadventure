@@ -23,11 +23,18 @@ type Planet struct {
 }
 
 func main() {
+
+	if len(os.Args) <= 1 {
+		fmt.Println("No file path provided")
+		return
+	}
+
 	// Open our jsonFile
-	jsonFile, err := os.Open("/home/colin/Downloads/planetarySystem.json")
+	jsonFile, err := os.Open(os.Args[1])
 	// if we os.Open returns an error then handle it
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Unable to open file")
+		return
 	}
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
@@ -63,7 +70,12 @@ func main() {
 func GetInput(prompt string) string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(prompt + " ")
-	input, _ := reader.ReadString('\n')
+	input, err := reader.ReadString('\n')
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	input = strings.TrimRight(input, "\n")
 	return input
 }
