@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -29,19 +30,12 @@ func main() {
 		return
 	}
 
-	// Open our jsonFile
-	jsonFile, err := os.Open(os.Args[1])
-	// if we os.Open returns an error then handle it
+	system, err := ReadJson(os.Args[1])
+
 	if err != nil {
-		fmt.Println("Unable to open file")
+		fmt.Println(err)
 		return
 	}
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var system System
-
-	json.Unmarshal(byteValue, &system)
 
 	fmt.Println("Welcome to the " + system.Name)
 	fmt.Println("There are " + strconv.Itoa(len(system.Planets)) + " planets")
@@ -65,6 +59,23 @@ func main() {
 
 	}
 
+}
+
+func ReadJson(path string) (System, error) {
+	jsonFile, err := os.Open(path)
+	// if we os.Open returns an error then handle it
+	if err != nil {
+
+		return System{}, errors.New("Cannot open file")
+	}
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+
+	var system System
+
+	json.Unmarshal(byteValue, &system)
+
+	return system, nil
 }
 
 func GetInput(prompt string) string {
