@@ -43,17 +43,8 @@ func main() {
 
 	fmt.Println("Nice to meet you " + name + "!")
 	fmt.Println("Let's go on an adventure!")
-	randomChoice := ""
 
-	for {
-		randomChoice = strings.ToLower(GetInput("Shall I randomly choose a planet for you? (Y or N)"))
-		if randomChoice == "y" || randomChoice == "n" {
-			break
-		}
-		fmt.Println("Invalid input")
-	}
-
-	if randomChoice == "y" {
+	if GetYNResponse("Would you like me to randomly choose a planet for you? (Y/N)", "Sorry, I don't understand.") {
 		rand.Seed(time.Now().UnixNano())
 		randomNumber := rand.Intn(len(system.Planets))
 		planet := system.Planets[randomNumber]
@@ -75,6 +66,18 @@ func GetInput(prompt string) string {
 	input, _ := reader.ReadString('\n')
 	input = strings.TrimRight(input, "\n")
 	return input
+}
+
+func GetYNResponse(prompt string, errorMessage string) bool {
+	input := strings.ToLower(GetInput(prompt))
+	if input == "y" {
+		return true
+	} else if input == "n" {
+		return false
+	} else {
+		fmt.Println(errorMessage)
+		return GetYNResponse(prompt, errorMessage)
+	}
 }
 
 func FindPlanet(planets []Planet, name string) Planet {
